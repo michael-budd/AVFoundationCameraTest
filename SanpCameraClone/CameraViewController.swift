@@ -22,7 +22,7 @@ class CameraViewController: UIViewController {
     var currentDevice: AVCaptureDevice?
     
     // MARK: - Outlets
-    @IBOutlet weak var cameraView: UIView!
+    @IBOutlet var cameraView: UIView!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -66,16 +66,9 @@ class CameraViewController: UIViewController {
     }
     
     // MARK: - Actions
-    @IBAction func shutterButtonTapped(_ sender: UIButton) {
-        
-    }
     
-    func configureAVCapture() {
-        
-
-        
-        
-        
+    @IBAction func shutterButtonTapped(_ sender: UIButton) {
+        print("button tapped")
     }
     
 }

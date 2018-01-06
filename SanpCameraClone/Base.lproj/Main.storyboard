@@ -34,8 +34,7 @@
                                 </constraints>
                                 <state key="normal" image="button-shutter"/>
                                 <connections>
-                                    <action selector="shutterButtonDidTap" destination="Yd2-VP-JJe" eventType="touchUpInside" id="k6O-JS-h0r"/>
-                                    <action selector="shutterButtonTapped:" destination="Yd2-VP-JJe" eventType="touchUpInside" id="I7u-Oy-lpU"/>
+                                    <action selector="shutterButtonTapped:" destination="Yd2-VP-JJe" eventType="touchUpInside" id="ApA-fG-Iby"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -52,7 +51,7 @@
                     </view>
                     <connections>
                         <outlet property="cameraView" destination="WLI-cZ-uLg" id="ZgF-gg-E08"/>
-                        <segue destination="sIE-aQ-O3F" kind="presentation" id="TWt-AA-5AQ"/>
+                        <segue destination="sIE-aQ-O3F" kind="presentation" identifier="showCapture" id="U3w-vN-68R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OWn-EV-dkc" sceneMemberID="firstResponder"/>
