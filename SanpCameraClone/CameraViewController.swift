@@ -9,17 +9,16 @@
 import UIKit
 import AVFoundation
 
-class CameraViewController: UIViewController {
+class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     
     // MARK: - Properties
     
-    var captureSession: AVCaptureSession!
-    var cameraOutput: AVCapturePhotoOutput!
-    var previewLayer: AVCaptureVideoPreviewLayer!
+    let captureSession =  AVCaptureSession()
+    var capturePhotoOutput = AVCapturePhotoOutput()
+    let previewView =  AVCaptureVideoPreviewLayer()
+    var isCaptureSessionConfigured = false
     
-    var backFacingCamera: AVCaptureDevice?
-    var frontFacingCamera: AVCaptureDevice?
-    var currentDevice: AVCaptureDevice?
+    let sessionQueue = DispatchQueue(label: "session")
     
     // MARK: - Outlets
     @IBOutlet var cameraView: UIView!
@@ -28,48 +27,109 @@ class CameraViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        previewLayer.frame = cameraView.bounds
+        view.layer.addSublayer(previewView)
+        previewView.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        previewView.frame = view.layer.frame
+        view.bringSubview(toFront: cameraView)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        captureSession = AVCaptureSession()
-        captureSession.sessionPreset = AVCaptureSession.Preset.hd1920x1080
         
-        backFacingCamera = AVCaptureDevice.default(for: AVMediaType.video)
-        
-        do {
-            let input = try AVCaptureDeviceInput(device: backFacingCamera!)
-            if captureSession.canAddInput(input) == true {
-                captureSession.addInput(input)
+        if self.isCaptureSessionConfigured {
+            if !self.captureSession.isRunning {
+                self.captureSession.stopRunning()
             }
-            
-            cameraOutput = AVCapturePhotoOutput()
-            
-            if captureSession.canAddOutput(cameraOutput) == true {
-                captureSession.addOutput(cameraOutput)
-                previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-                previewLayer.videoGravity = AVLayerVideoGravity.resizeAspect
-                previewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
-                
-                cameraView.layer.addSublayer(previewLayer)
-                
-                captureSession.startRunning()
-                
+        } else {
+            self.sessionQueue.async {
+                self.configureCaptureSession({ (success) in
+                    guard success else { return }
+                    
+                    self.isCaptureSessionConfigured = true
+                    
+                    self.captureSession.startRunning()
+                    
+                    let videoPlayerConnection = self.previewView.connection
+                    
+                    DispatchQueue.main.async {
+                        videoPlayerConnection?.videoOrientation = .portrait
+                        self.view.bringSubview(toFront: self.cameraView)
+                    }
+                    
+                })
             }
-        } catch {
-            debugPrint(error)
         }
+        
     }
     
     // MARK: - Actions
     
     @IBAction func shutterButtonTapped(_ sender: UIButton) {
         print("button tapped")
+        
+        
     }
+    
+    func configureCaptureSession(_ completionHandler: ((_ success: Bool) -> Void)) {
+        
+        var success = false
+        
+        defer { completionHandler(success) } // Ensure all exit paths from func call completion
+        
+        // Get video input for default camera
+        
+        let videoCaptureDevice = defaultDevice()
+        
+        guard let videoInput = try? AVCaptureDeviceInput(device: videoCaptureDevice) else {
+            
+            print("Unable to obtain video input for default camera")
+            
+            return
+        }
+        
+        // Photo Output
+        
+        let capturePhotoOutput = AVCapturePhotoOutput()
+        capturePhotoOutput.isHighResolutionCaptureEnabled = true
+        
+        // If live photo is supported then it is enabled
+        capturePhotoOutput.isLivePhotoCaptureEnabled = capturePhotoOutput.isLivePhotoCaptureSupported
+        
+        // Ensure inputs and outputs can be added to session
+        
+        guard self.captureSession.canAddInput(videoInput) else { return }
+        guard self.captureSession.canAddOutput(capturePhotoOutput) else { return }
+        
+        // Config session
+        
+        self.captureSession.beginConfiguration()
+        self.captureSession.sessionPreset = AVCaptureSession.Preset.photo
+        self.captureSession.addInput(videoInput)
+        self.captureSession.addOutput(capturePhotoOutput)
+        self.captureSession.commitConfiguration()
+        
+        self.capturePhotoOutput = capturePhotoOutput
+        self.previewView.session = self.captureSession
+        
+        success = true
+        
+    }
+    
+    func defaultDevice() -> AVCaptureDevice {
+        
+        if let device = AVCaptureDevice.default(.builtInDualCamera, for: AVMediaType.video, position: .back) {
+            return device // Use dual camera on supported devices
+        } else if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back) {
+            return device
+        } else {
+            fatalError("All supported devices are expected to have at least one rear camera")
+        }
+        
+    }
+    
+    
     
 }
 

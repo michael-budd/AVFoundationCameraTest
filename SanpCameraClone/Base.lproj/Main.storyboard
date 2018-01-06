@@ -22,10 +22,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WLI-cZ-uLg">
-                                <rect key="frame" x="-0.5" y="10" width="375" height="667"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iKe-qy-3SU">
                                 <rect key="frame" x="160" y="563" width="55" height="55"/>
                                 <constraints>
@@ -40,17 +36,13 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="WLI-cZ-uLg" firstAttribute="height" secondItem="rrH-4T-2zn" secondAttribute="height" id="7GW-EX-Ouo"/>
-                            <constraint firstItem="WLI-cZ-uLg" firstAttribute="width" secondItem="rrH-4T-2zn" secondAttribute="width" id="D7M-yH-0gu"/>
                             <constraint firstItem="iKe-qy-3SU" firstAttribute="centerX" secondItem="rrH-4T-2zn" secondAttribute="centerX" id="PPp-IY-9D0"/>
-                            <constraint firstItem="WLI-cZ-uLg" firstAttribute="centerY" secondItem="VBQ-b7-rbZ" secondAttribute="centerY" id="Pbj-CT-9dp"/>
                             <constraint firstItem="0Eb-L7-o0a" firstAttribute="top" secondItem="iKe-qy-3SU" secondAttribute="bottom" constant="49" id="bZ7-29-X3h"/>
-                            <constraint firstItem="WLI-cZ-uLg" firstAttribute="centerX" secondItem="VBQ-b7-rbZ" secondAttribute="centerX" id="n4v-g1-PuN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="VBQ-b7-rbZ"/>
                     </view>
                     <connections>
-                        <outlet property="cameraView" destination="WLI-cZ-uLg" id="ZgF-gg-E08"/>
+                        <outlet property="cameraView" destination="rrH-4T-2zn" id="V6c-Y8-cnr"/>
                         <segue destination="sIE-aQ-O3F" kind="presentation" identifier="showCapture" id="U3w-vN-68R"/>
                     </connections>
                 </viewController>
