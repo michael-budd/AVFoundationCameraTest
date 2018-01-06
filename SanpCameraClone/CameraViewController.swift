@@ -30,7 +30,9 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         view.layer.addSublayer(previewView)
         previewView.videoGravity = AVLayerVideoGravity.resizeAspectFill
         previewView.frame = view.layer.frame
-        view.bringSubview(toFront: cameraView)
+        DispatchQueue.main.async {
+            self.view.bringSubview(toFront: self.cameraView)
+        }
         
     }
     
@@ -55,7 +57,6 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
                     
                     DispatchQueue.main.async {
                         videoPlayerConnection?.videoOrientation = .portrait
-                        self.view.bringSubview(toFront: self.cameraView)
                     }
                     
                 })

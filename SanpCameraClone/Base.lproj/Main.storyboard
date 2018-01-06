@@ -22,27 +22,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iKe-qy-3SU">
-                                <rect key="frame" x="160" y="563" width="55" height="55"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZLb-Qm-DVD">
+                                <rect key="frame" x="0.0" y="10" width="375" height="667"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iKe-qy-3SU">
+                                        <rect key="frame" x="160" y="548" width="55" height="55"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="55" id="DA1-Xh-P9M"/>
+                                            <constraint firstAttribute="height" constant="55" id="hZO-i6-JQC"/>
+                                        </constraints>
+                                        <state key="normal" image="button-shutter"/>
+                                        <connections>
+                                            <action selector="shutterButtonTapped:" destination="Yd2-VP-JJe" eventType="touchUpInside" id="ApA-fG-Iby"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="55" id="DA1-Xh-P9M"/>
-                                    <constraint firstAttribute="height" constant="55" id="hZO-i6-JQC"/>
+                                    <constraint firstAttribute="bottom" secondItem="iKe-qy-3SU" secondAttribute="bottom" constant="64" id="DdD-zC-OwO"/>
+                                    <constraint firstAttribute="height" constant="667" id="FKW-Ve-hyD"/>
+                                    <constraint firstAttribute="width" constant="375" id="SU6-W3-LbH"/>
+                                    <constraint firstItem="iKe-qy-3SU" firstAttribute="centerX" secondItem="ZLb-Qm-DVD" secondAttribute="centerX" id="UZ7-3Z-9Zg"/>
                                 </constraints>
-                                <state key="normal" image="button-shutter"/>
-                                <connections>
-                                    <action selector="shutterButtonTapped:" destination="Yd2-VP-JJe" eventType="touchUpInside" id="ApA-fG-Iby"/>
-                                </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="iKe-qy-3SU" firstAttribute="centerX" secondItem="rrH-4T-2zn" secondAttribute="centerX" id="PPp-IY-9D0"/>
-                            <constraint firstItem="0Eb-L7-o0a" firstAttribute="top" secondItem="iKe-qy-3SU" secondAttribute="bottom" constant="49" id="bZ7-29-X3h"/>
+                            <constraint firstItem="ZLb-Qm-DVD" firstAttribute="centerX" secondItem="VBQ-b7-rbZ" secondAttribute="centerX" id="3Lo-33-efJ"/>
+                            <constraint firstItem="ZLb-Qm-DVD" firstAttribute="width" secondItem="rrH-4T-2zn" secondAttribute="width" id="8fN-GD-VXn"/>
+                            <constraint firstItem="ZLb-Qm-DVD" firstAttribute="centerY" secondItem="VBQ-b7-rbZ" secondAttribute="centerY" id="InO-sW-mbj"/>
+                            <constraint firstItem="ZLb-Qm-DVD" firstAttribute="height" secondItem="rrH-4T-2zn" secondAttribute="height" id="b1w-Wm-sbD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="VBQ-b7-rbZ"/>
                     </view>
                     <connections>
-                        <outlet property="cameraView" destination="rrH-4T-2zn" id="V6c-Y8-cnr"/>
+                        <outlet property="cameraView" destination="ZLb-Qm-DVD" id="Q7X-6d-9wk"/>
                         <segue destination="sIE-aQ-O3F" kind="presentation" identifier="showCapture" id="U3w-vN-68R"/>
                     </connections>
                 </viewController>
