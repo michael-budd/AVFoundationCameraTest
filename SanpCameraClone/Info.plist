@@ -43,5 +43,7 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>For in app camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>The photo library is used to store pictures taken by the user in the app.</string>
 </dict>
 </plist>

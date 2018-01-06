@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import AVKit
 
 class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     
@@ -17,6 +18,10 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     var capturePhotoOutput = AVCapturePhotoOutput()
     let previewView =  AVCaptureVideoPreviewLayer()
     var isCaptureSessionConfigured = false
+    var photoSampleBuffer: CMSampleBuffer?
+    var previewPhotoSampleBuffer: CMSampleBuffer?
+    
+    
     
     let sessionQueue = DispatchQueue(label: "session")
     
@@ -65,11 +70,37 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if captureSession.isRunning {
+            captureSession.stopRunning()
+        }
+    }
+    
     // MARK: - Actions
     
     @IBAction func shutterButtonTapped(_ sender: UIButton) {
         print("button tapped")
         
+        let photoSettings = AVCapturePhotoSettings()
+        photoSettings.isAutoStillImageStabilizationEnabled = true
+        photoSettings.flashMode = .auto
+        photoSettings.isHighResolutionPhotoEnabled = true
+        
+        let capturePhotoOutput = self.capturePhotoOutput
+        
+        let videoPreviewLayerOrientation = previewView.connection?.videoOrientation
+        
+        self.sessionQueue.async {
+            
+            if let photoOutputConnection = capturePhotoOutput.connection(with: AVMediaType.video) {
+                photoOutputConnection.videoOrientation = videoPreviewLayerOrientation!
+            }
+            
+        }
+        
+        capturePhotoOutput.capturePhoto(with: photoSettings, delegate: self)
         
     }
     
@@ -129,6 +160,33 @@ class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         }
         
     }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+        
+        guard error == nil, let photoSampleBuffer = photoSampleBuffer else {
+            print("Error capturing photo: \(String(describing: error))")
+            return
+        }
+        
+        self.photoSampleBuffer = photoSampleBuffer
+        self.previewPhotoSampleBuffer = previewPhotoSampleBuffer
+        
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
+        
+        guard error == nil else {
+            print("Error in capture process: \(String(describing: error))")
+            return
+        }
+        
+        if let photoSampleBuffer = self.photoSampleBuffer {
+            
+        }
+        
+    }
+    
+    
     
     
     
